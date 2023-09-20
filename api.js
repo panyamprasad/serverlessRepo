@@ -7,6 +7,7 @@ const {
   UpdateItemCommand,
 } = require("@aws-sdk/client-dynamodb");
 const { marshall, unmarshall } = require("@aws-sdk/util-dynamodb");
+
 const getPost = async (event) => {
   const response = { statusCode: 200 };
   try {
@@ -15,10 +16,19 @@ const getPost = async (event) => {
       Key: marshall({ postId: event.pathParameters.postId }),
     };
     const { Item } = await db.send(new GetItemCommand(params));
-    console.log({ Item });
+
+    if (!Item) {
+      // Handle the case where the item is not found
+      response.statusCode = 404;
+      response.body = JSON.stringify({
+        message: "Post not found.",
+      });
+      return response;
+    }
+
     response.body = JSON.stringify({
       message: "Successfully retrieved post.",
-      data: Item ? unmarshall(Item) : {},
+      data: unmarshall(Item),
       rawData: Item,
     });
   } catch (e) {
@@ -32,6 +42,7 @@ const getPost = async (event) => {
   }
   return response;
 };
+
 const createPost = async (event) => {
   const response = { statusCode: 200 };
   try {
