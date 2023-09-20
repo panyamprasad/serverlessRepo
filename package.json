@@ -1,5 +1,4 @@
 {
-  "type": "module",
   "name": "dynamodb-crud-api-gateway",
   "version": "1.0.0",
   "description": "DynamoDB CRUD API using API Gateway and AWS Lambda",
