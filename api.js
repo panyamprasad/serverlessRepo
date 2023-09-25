@@ -19,6 +19,7 @@ const getPost = async (event) => {
 
     if (!Item) {
       // Handle the case where the item is not found
+      // testing
       response.statusCode = 404;
       response.body = JSON.stringify({
         message: "Post not found.",
